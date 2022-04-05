@@ -3,5 +3,7 @@
 {% block title %}Ajout produit{% endblock %}
 
 {% block body %}
-  Nom du produit : {{ nom }}
+ <h1>Produit id : {{ produit.id }}</h1>
+  Nom du produit : {{ produit.nom }}<br>
+  Prix : {{ produit.prix }}<br>
 {% endblock %}

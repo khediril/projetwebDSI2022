@@ -1,0 +1,42 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}Liste{% endblock %}
+
+{% block body %}
+ <div class="container">
+   
+ 
+ <h1>Liste de tous les produits</h1>
+ 
+
+
+  <table class="table table-striped ">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">NOM</th>
+      <th scope="col">PRIX</th>
+       <th scope="col">Action</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+   {% for p in produits %}
+    <tr>
+      <th scope="row">{{ p.id }}</th>
+      <td>{{ p.nom }}</td>
+      <td>{{ p.prix }}</td>
+      <td><a href="{{ path("app_produit_delete" ,{'id':p.id} ) }}">Supprimer</td>
+      <td><a href="{{ path("app_produit_detail" ,{'id':p.id} ) }}">Detail</td>
+      
+    </tr>
+     {% endfor %}
+
+      </tbody>
+</table>
+
+</div>
+
+
+{% endblock %}
+
