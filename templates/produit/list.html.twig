@@ -16,7 +16,8 @@
       <th scope="col">ID</th>
       <th scope="col">NOM</th>
       <th scope="col">PRIX</th>
-       <th scope="col">Action</th>
+      <th scope="col">CATEGORIE</th>
+       <th scope="col">Actions</th>
       
     </tr>
   </thead>
@@ -26,8 +27,9 @@
       <th scope="row">{{ p.id }}</th>
       <td>{{ p.nom }}</td>
       <td>{{ p.prix }}</td>
-      <td><a href="{{ path("app_produit_delete" ,{'id':p.id} ) }}">Supprimer</td>
-      <td><a href="{{ path("app_produit_detail" ,{'id':p.id} ) }}">Detail</td>
+      <td>{{ p.categorie.nom }}</td>
+      <td><a class="btn btn-danger" href="{{ path("app_produit_delete" ,{'id':p.id} ) }}">Supprimer </a>
+      <a class="btn btn-primary" href="{{ path("app_produit_detail" ,{'id':p.id} ) }}">  Detail</a></td>
       
     </tr>
      {% endfor %}

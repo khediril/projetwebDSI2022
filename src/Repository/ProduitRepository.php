@@ -73,4 +73,40 @@ class ProduitRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function chercherParIntervalPrix($pmin, $pmax)
+    {  
+        // en DQL
+       /* $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT p
+            FROM App\Entity\Produit p
+            WHERE p.prix > :pmin and p.prix < :pmax
+            ORDER BY p.prix ASC'
+        )->setParameter('pmin', $pmin)
+        ->setParameter('pmax', $pmax);
+
+        // returns an array of Product objects
+        return $query->getResult();*/ 
+        //////////////////////////////////////////////
+        // En utilisant QueryBuilder
+        $qb = $this->createQueryBuilder('p');
+        $qb->where('p.prix > :pmin and p.prix < :pmax')
+           
+            ->setParameter('pmin', $pmin)
+            ->setParameter('pmax', $pmax)
+            ->orderBy('p.prix', 'ASC');
+
+       
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+
+        // to get just one result:
+        // $product = $query->setMaxResults(1)->getOneOrNullResult();
+
+
+
+
+    }
 }

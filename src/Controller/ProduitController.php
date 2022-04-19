@@ -66,9 +66,37 @@ class ProduitController extends AbstractController
     public function detail($id,ProduitRepository $repos): Response
     {
         $produit=$repos->find($id);
-        
+        if(!$produit)
+        {
+            return $this->render('produit/erreur.html.twig', ["msg" => "Aucun produit avec id:$id"  ]);     
+        }
        
         //return $this->redirectToRoute('app_produit_list');
         return $this->render('produit/detail.html.twig', ["produit" => $produit  ]);
     }
+      /**
+     * @Route("/produit/chercher/{pmin}/{pmax}", name="app_produit_chercher")
+     */
+    public function chercher($pmin,$pmax,ProduitRepository $repos): Response
+    {
+        $produits = $repos->chercherParIntervalPrix($pmin,$pmax);
+
+        return $this->render('produit/list.html.twig', ["produits"=>$produits]);
+
+    }
+     /**
+     * @Route("/api/detail/{id}", name="app_produit_detail")
+     */
+    public function detailJson($id,ProduitRepository $repos): Response
+    {
+        $produit=$repos->find($id);
+        if(!$produit)
+        {
+            return $this->render('produit/erreur.html.twig', ["msg" => "Aucun produit avec id:$id"  ]);     
+        }
+       
+        //return $this->redirectToRoute('app_produit_list');
+        return $this->json($produit);
+    }
+    
 }
