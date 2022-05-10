@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Produit;
+use App\Form\ProduitType;
+use App\Repository\UserRepository;
 use App\Repository\ProduitRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -85,7 +88,7 @@ class ProduitController extends AbstractController
 
     }
      /**
-     * @Route("/api/detail/{id}", name="app_produit_detail")
+     * @Route("/api/detail/{id}", name="api_app_produit_detail")
      */
     public function detailJson($id,ProduitRepository $repos): Response
     {
@@ -97,6 +100,37 @@ class ProduitController extends AbstractController
        
         //return $this->redirectToRoute('app_produit_list');
         return $this->json($produit);
+    }
+    /**
+     * @Route("/produit/ajout", name="app_produit_ajout")
+     */
+    public function ajout(Request $request,UserRepository $userrepo): Response
+    {
+       $produit = new Produit();
+       
+       $form = $this->createForm(ProduitType::class,$produit,[[
+                'method' => 'GET',
+    ]]);
+       
+       //traitement du formulaire
+       $form->handleRequest($request);
+       if ($form->isSubmitted() && $form->isValid()) {
+           // $form->getData() holds the submitted values
+           // but, the original `$task` variable has also been updated
+          // $task = $form->getData();
+           $produit->setCreatedAt(new \DateTime());
+           $user = $userrepo->find(1);
+           $produit->setOwner($user);
+           $em = $this->getDoctrine()->getManager();
+           $em->persist($produit);
+           $em->flush();
+           // ... perform some action, such as saving the task to the database
+
+           return $this->redirectToRoute('app_produit_list');
+       }
+
+       //return $this->render('/produit/ajout.html.twig',['form' => $form->createView()]);
+       return $this->renderForm('/produit/ajout.html.twig',['form' => $form]);
     }
     
 }

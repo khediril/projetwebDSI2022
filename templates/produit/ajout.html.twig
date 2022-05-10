@@ -1,0 +1,27 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}Ajout produit{% endblock %}
+
+{% block body %}
+<style>
+label.required:before {
+    content: "*";
+}
+</style>
+ <div class="container">
+   {{ form_start(form)}}
+
+  <b> {{ form_label(form.nom)}}</b>
+   {{ form_widget(form.nom)}}
+   {{ form_help(form.nom)}}
+   {{ form_errors(form.nom)}}
+   {{ form_row(form.prix)}}
+   {{ form_row(form.description)}}
+   {{ form_row(form.stock)}}
+   {{ form_row(form.categorie)}}
+   {{ form_row(form.save)}}
+
+   {{ form_end(form)}}
+ </div>
+ 
+{% endblock %}

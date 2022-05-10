@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProduitRepository::class)
@@ -24,6 +25,11 @@ class Produit
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(
+     *      min = 100,
+     *      max = 1000,
+     *      notInRangeMessage = "Le prix doit etre compris entre {{ min }} et {{ max }}",
+     * )
      */
     private $prix;
 
