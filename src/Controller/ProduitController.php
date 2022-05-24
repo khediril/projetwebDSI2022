@@ -4,13 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Produit;
 use App\Form\ProduitType;
+use App\Service\MessageGenerator;
 use App\Repository\UserRepository;
 use App\Repository\ProduitRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 class ProduitController extends AbstractController
 {
@@ -41,12 +44,17 @@ class ProduitController extends AbstractController
         return $this->render('produit/add.html.twig', ["produit" => $produit  ]);
     }
      /**
-     * @Route("/produit/list", name="app_produit_list")
+     * @Route("/{_locale}", name="app_produit_list")
+     * @IsGranted("ROLE_ADMIN")
      */
-    public function list(ProduitRepository $repos): Response
+    public function list(ProduitRepository $repos,MessageGenerator $mg): Response
     {
+        $user = $this->getUser();
+       // dd($user);
+        $email = $user->getEmail();
+        $message = $mg->getHappyMessage();
         $produits = $repos->findAll();
-        return $this->render('produit/list.html.twig', ["produits"=>$produits]);
+        return $this->render('produit/list.html.twig', ["produits"=>$produits,"ema"=>$email,"msg" =>$message]);
 
     }
     /**
@@ -106,11 +114,12 @@ class ProduitController extends AbstractController
      */
     public function ajout(Request $request,UserRepository $userrepo): Response
     {
-       $produit = new Produit();
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $produit = new Produit();
        
-       $form = $this->createForm(ProduitType::class,$produit,[[
+       $form = $this->createForm(ProduitType::class,$produit,[
                 'method' => 'GET',
-    ]]);
+    ]);
        
        //traitement du formulaire
        $form->handleRequest($request);
